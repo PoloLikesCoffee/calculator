@@ -5,7 +5,9 @@
     --font-family: monospace;
     --color-primary: white;
     --color-secondary: black;
-    --output: gray;
+    --color-clear: red;
+    --color-equal: green;
+    --color-output: gray;
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
@@ -26,7 +28,7 @@ body {
     display: grid;
     background-color: var(--color-primary);
     margin: 50px auto;
-    width: 300px;
+    width: 350px;
     border: var(--border-size) solid black;
     box-shadow: var(--shadow) 4px 4px;
     grid-template-columns: repeat(var(--temp-column), auto);
@@ -39,15 +41,15 @@ body {
     grid-column-start: 1;
     grid-column-end: 5;
     margin-bottom:5px;
-    max-height: 80px;
+    min-height: 80px;
     padding: 20px;
     border: var(--border-size) solid black;
-    background-color: var(--output);
+    background-color: var(--color-output);
     font-family: var(--font-family);
     font-size: 29px;
     text-align: right;
-    /*word-wrap: break-word;
-    word-break: break-all;*/
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 #calculatorContainer button {
@@ -64,36 +66,38 @@ body {
     background-color: var(--color-secondary);
 }
 
-.clearButton {
+#clearButton {
     grid-column-start: 1;
     grid-column-end: 3;
     color: var(--color-primary);
-    background-color: var(--color-secondary);
+    background-color: var(--color-clear);
 }
 
-.clearButton:hover {
-    color: var(--color-secondary);
+#clearButton:hover {
+    color: var(--color-clear);
     background-color: var(--color-primary);
 }
 
-.deleteButton {
+#deleteButton {
     grid-column-start: 3;
     grid-column-end: 5;
     color: var(--color-primary);
     background-color: var(--color-secondary);
 }
 
-.deleteButton:hover {
+#deleteButton:hover {
     color: var(--color-secondary);
     background-color: var(--color-primary);
 }
 
-.equalButton {
+#equalButton {
+    grid-column-start: 2;
+    grid-column-end: 4;
     color: var(--color-primary);
-    background-color: var(--color-secondary);
+    background-color: var(--color-equal);
 }
 
-.equalButton:hover {
-    color: var(--color-secondary);
+#equalButton:hover {
+    color: var(--color-equal);
     background-color: var(--color-primary);
 }
