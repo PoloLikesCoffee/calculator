@@ -37,6 +37,10 @@ btns.forEach(btn => {
             deleteLastChar();
             updateDisplay();
         }
+        if (event.target.hasAttribute('data-dot')) {
+            getDecimal(event.target.value);
+            updateDisplay();
+        }
     });
 });
 
@@ -59,18 +63,22 @@ document.addEventListener('keydown', (e) => {
         clearEverything();
         updateDisplay();
     }
+    if (e.key === '.') {
+        getDecimal(e.key);
+        updateDisplay();
+    }
 });
 
 function getNumbers(number) {
     if (firstValue === 0) {
-        // first click = input of first value
+        // first step = input of first value
         if (displayValue === 0) {
             displayValue = number;
         } else {
             displayValue += number;
         }
     } else {
-        // third click = input of second value
+        // third step = input of second value
         if (displayValue === firstValue) {
             displayValue = number;
         } else {
@@ -81,7 +89,7 @@ function getNumbers(number) {
 
 function getOperators(operator) {
     if(firstOperator != '' && secondOperator === '') {
-        //fourth click = if there is already the first operator,
+        //fourth step = if there is already the first operator,
         //input of second operator
         secondOperator = operator;
         secondValue = displayValue;
@@ -95,7 +103,7 @@ function getOperators(operator) {
         }
         updateDisplay();
     } else if (firstOperator != '' && secondOperator != '') {
-        //sixth click = input of new operator
+        //sixth step = input of new operator
         secondValue = displayValue;
         solution = operate(secondOperator, firstValue, secondValue);
         secondOperator = operator;
@@ -109,7 +117,7 @@ function getOperators(operator) {
         updateDisplay();
     } 
     else {
-        //second click = input of first operator
+        //second step = input of first operator
         firstOperator = operator;
         firstValue = displayValue;
     }    
@@ -171,23 +179,34 @@ function deleteLastChar() {
     }
 }
 
+function getDecimal(decimal) {
+    if (displayValue === 0) {
+        displayValue = 0;
+        displayValue += decimal;
+    } else if (displayValue.includes(decimal)) {
+        return;
+    } else {
+        displayValue += decimal;
+    }
+}
+
 function add (a, b) {
-    return parseInt(a) + parseInt(b);
+    return Number(a) + Number(b);
 }
 
 function subtract (a, b) {
-    return parseInt(a) - parseInt(b);
+    return a - b;
 }
 
 function multiply (a, b) {
-    return parseInt(a) * parseInt(b);
+    return a * b;
 }
 
 function divide (a, b) {
     if (b === 0 || b === '0') {
         return 'ERROR...ERROR';
     } else {
-        return parseInt(a) /   parseInt(b);
+        return a / b;
     }
 }
 

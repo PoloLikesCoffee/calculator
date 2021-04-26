@@ -91,7 +91,7 @@ body {
 }
 
 #equalButton {
-    grid-column-start: 2;
+    grid-column-start: 3;
     grid-column-end: 4;
     color: var(--color-primary);
     background-color: var(--color-equal);
