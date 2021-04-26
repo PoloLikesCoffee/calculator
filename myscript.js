@@ -1,92 +1,164 @@
 const btns = document.querySelectorAll('button');
 const display = document.getElementById('output');
-let operator = '';
-let currentValue = 0;
-let previousValue = 0;
+
+let displayValue = 0;
+
+let firstValue = 0;
+let secondValue = 0;
+
+let firstOperator = '';
+let secondOperator = '';
+
+let solution = 0;
+
+function updateDisplay() {
+    display.textContent = displayValue;
+}
+
+updateDisplay();
 
 btns.forEach(btn => {
     btn.addEventListener('click', event => {
         if (event.target.hasAttribute('data-number')) {
-            //console.log('number', event.target.value);
-            
-            if(operator){
-                currentValue+=event.target.value;
-                updateDisplay(event.target.value);
+            if (firstValue === 0) {
+                // first click = input of first value
+                if (displayValue === 0) {
+                    displayValue = event.target.value;
+                } else {
+                    displayValue += event.target.value;
+                }
             } else {
-                updateDisplay(event.target.value);
-                previousValue+=event.target.value;
+                // third click = input of second value
+                if (displayValue === firstValue) {
+                    displayValue = event.target.value;
+                } else {
+                    displayValue += event.target.value;
+                }
             }
-            
-        } else if (event.target.hasAttribute('data-operator')) {
-            //console.log('operator', event.target.value);
-            if (event.target.value==='=') {
-                operate(operator, previousValue, currentValue);
-                display.textContent = '';
-                updateDisplay(operate(operator, previousValue, currentValue));
+            updateDisplay();
+        } 
+        if (event.target.hasAttribute('data-operator')) { 
+            if(firstOperator != '' && secondOperator === '') {
+                //fourth click = if there is already the first operator,
+                //input of second operator
+                secondOperator = event.target.value;
+                secondValue = displayValue;
+                solution = operate(firstOperator, firstValue, secondValue);
+                if (solution === 'ERROR...ERROR') {
+                    displayValue = 'ERROR...ERROR';
+                } else {
+                    displayValue = Math.round(solution * 1000) / 1000;
+                    firstValue = displayValue;
+                    solution = 0;
+                }
+                updateDisplay();
+            } else if (firstOperator != '' && secondOperator != '') {
+                //sixth click = input of new operator
+                secondValue = displayValue;
+                solution = operate(secondOperator, firstValue, secondValue);
+                secondOperator = event.target.value;
+                if (solution === 'ERROR...ERROR') {
+                    displayValue = 'ERROR...ERROR';
+                } else {
+                    displayValue = Math.round(solution * 1000) / 1000;
+                    firstValue = displayValue;
+                    solution = 0;
+                }
+                updateDisplay();
+            } 
+            else {
+                //second click = input of first operator
+                firstOperator = event.target.value;
+                firstValue = displayValue;
+            }    
+
+        }
+        if (event.target.hasAttribute('data-equals')) {
+            if (firstOperator === '') {
+                //pressing equals when there is no operator
+                displayValue = displayValue;
+            } else if (secondOperator != '') {
+                //if there is a second operator, next equals operation
+                secondValue = displayValue;
+                solution = operate(secondOperator, firstValue, secondValue);
+                if (solution === 'ERROR...ERROR') {
+                    displayValue = 'ERROR...ERROR';
+                } else {
+                    displayValue = Math.round(solution * 1000) / 1000;
+                    firstValue = displayValue;
+                    secondValue = 0;
+                    firstOperator = '';
+                    secondOperator = '';
+                    solution = 0;
+                }
+                updateDisplay();
             } else {
-                updateDisplay(event.target.value);
-                operator = event.target.value;
+                //first equals operaton
+                secondValue = displayValue;
+                solution = operate(firstOperator, firstValue, secondValue);
+                if (solution === 'ERROR...ERROR') {
+                    displayValue = 'ERROR...ERROR';
+                } else {
+                    displayValue = Math.round(solution * 1000) / 1000;
+                    firstValue = displayValue;
+                    secondValue = 0;
+                    firstOperator = '';
+                    secondOperator = '';
+                    solution = 0;
+                }
+                updateDisplay();
             }
         }
         if (event.target.hasAttribute('data-clear')) {
-            //console.log('clear');
-            display.textContent = '';
-        }
+            //reset of all variables
+            displayValue = 0;
+            firstValue = 0;
+            secondValue = 0;
+            firstOperator = '';
+            secondOperator = '';
+            solution = 0;
+            updateDisplay();
+        } 
         if (event.target.hasAttribute('data-delete')) {
-            //console.log('delete');
-            let a = display.textContent;
-            let b = a.slice(0, a.length-1);
-            display.textContent = b;
+            if (displayValue === 0) {
+                displayValue = displayValue;
+            } else {
+                displayValue = displayValue.toString().slice(0, -1);
+            }
+            updateDisplay();
         }
     });
 });
 
-
-function updateDisplay (number) {
-    display.textContent += number;
-    //currentValue += display.textContent;
-}
-
-
 function add (a, b) {
-    return a + b;
+    return parseInt(a) + parseInt(b);
 }
 
 function subtract (a, b) {
-    return a - b;
+    return parseInt(a) - parseInt(b);
 }
 
 function multiply (a, b) {
-    return a * b;
+    return parseInt(a) * parseInt(b);
 }
 
 function divide (a, b) {
-    return a / b;
+    if (b === 0 || b === '0') {
+        return 'ERROR...ERROR';
+    } else {
+        return parseInt(a) /   parseInt(b);
+    }
 }
 
-function operate (operator,a, b) {
+function operate (operator, a, b) {
     switch (operator) {
         case '+':
-            return add(a,b);
+            return add(a, b);
         case '-':
-            return subtract(a,b);
+            return subtract(a, b);
         case '*':
-            return multiply(a,b);
+            return multiply(a, b);
         case '/':
-            return divide(a,b);
+            return divide(a, b);
     }
-    //previous way
-    /*
-    if (operator == '+') {
-        return add(a,b);
-    } 
-    if (operator == '-') {
-        return subtract(a,b);
-    }
-    if (operator == '*') {
-        return multiply(a,b);
-    }
-    if (operator == '/') {
-        return divide(a,b);
-    } */
 }
