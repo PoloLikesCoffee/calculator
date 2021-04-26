@@ -130,6 +130,116 @@ btns.forEach(btn => {
     });
 });
 
+document.addEventListener('keydown', (e) => {
+    if (!isNaN(e.key)) {
+        if (firstValue === 0) {
+            // first click = input of first value
+            if (displayValue === 0) {
+                displayValue = e.key;
+            } else {
+                displayValue += e.key;
+            }
+        } else {
+            // third click = input of second value
+            if (displayValue === firstValue) {
+                displayValue = e.key;
+            } else {
+                displayValue += e.key;
+            }
+        }
+        updateDisplay();
+	}
+    if (['/', '+', '-', '*'].includes(e.key)) {
+        if(firstOperator != '' && secondOperator === '') {
+            //fourth click = if there is already the first operator,
+            //input of second operator
+            secondOperator = e.key;
+            secondValue = displayValue;
+            solution = operate(firstOperator, firstValue, secondValue);
+            if (solution === 'ERROR...ERROR') {
+                displayValue = 'ERROR...ERROR';
+            } else {
+                displayValue = Math.round(solution * 1000) / 1000;
+                firstValue = displayValue;
+                solution = 0;
+            }
+            updateDisplay();
+        } else if (firstOperator != '' && secondOperator != '') {
+            //sixth click = input of new operator
+            secondValue = displayValue;
+            solution = operate(secondOperator, firstValue, secondValue);
+            secondOperator = e.key;
+            if (solution === 'ERROR...ERROR') {
+                displayValue = 'ERROR...ERROR';
+            } else {
+                displayValue = Math.round(solution * 1000) / 1000;
+                firstValue = displayValue;
+                solution = 0;
+            }
+            updateDisplay();
+        } 
+        else {
+            //second click = input of first operator
+            firstOperator = e.key;
+            firstValue = displayValue;
+        }
+    }
+    if (e.key === '=' || e.key === 'Enter') {
+        if (firstOperator === '') {
+            //pressing equals when there is no operator
+            displayValue = displayValue;
+        } else if (secondOperator != '') {
+            //if there is a second operator, next equals operation
+            secondValue = displayValue;
+            solution = operate(secondOperator, firstValue, secondValue);
+            if (solution === 'ERROR...ERROR') {
+                displayValue = 'ERROR...ERROR';
+            } else {
+                displayValue = Math.round(solution * 1000) / 1000;
+                firstValue = displayValue;
+                secondValue = 0;
+                firstOperator = '';
+                secondOperator = '';
+                solution = 0;
+            }
+            updateDisplay();
+        } else {
+            //first equals operaton
+            secondValue = displayValue;
+            solution = operate(firstOperator, firstValue, secondValue);
+            if (solution === 'ERROR...ERROR') {
+                displayValue = 'ERROR...ERROR';
+            } else {
+                displayValue = Math.round(solution * 1000) / 1000;
+                firstValue = displayValue;
+                secondValue = 0;
+                firstOperator = '';
+                secondOperator = '';
+                solution = 0;
+            }
+            updateDisplay();
+        }
+    }
+    if (e.key === 'Backspace') {
+        if (displayValue === 0) {
+            displayValue = displayValue;
+        } else {
+            displayValue = displayValue.toString().slice(0, -1);
+        }
+        updateDisplay();
+    }
+    if (e.key === 'Delete') {
+        //reset of all variables
+        displayValue = 0;
+        firstValue = 0;
+        secondValue = 0;
+        firstOperator = '';
+        secondOperator = '';
+        solution = 0;
+        updateDisplay();
+    }
+});
+
 function add (a, b) {
     return parseInt(a) + parseInt(b);
 }
