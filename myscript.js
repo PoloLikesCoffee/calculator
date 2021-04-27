@@ -71,14 +71,15 @@ document.addEventListener('keydown', (e) => {
 
 function getNumbers(number) {
     if (firstValue === 0) {
-        // first step = input of first value
+        //first step = input of first number
         if (displayValue === 0) {
             displayValue = number;
         } else {
             displayValue += number;
         }
     } else {
-        // third step = input of second value
+        //third step = input of second number after input of first operator
+        //fifth step = input of number after second operator
         if (displayValue === firstValue) {
             displayValue = number;
         } else {
@@ -89,8 +90,7 @@ function getNumbers(number) {
 
 function getOperators(operator) {
     if(firstOperator != '' && secondOperator === '') {
-        //fourth step = if there is already the first operator,
-        //input of second operator
+        //fourth step bis = if there is already a first operator, input of second operator
         secondOperator = operator;
         secondValue = displayValue;
         solution = operate(firstOperator, firstValue, secondValue);
@@ -103,7 +103,7 @@ function getOperators(operator) {
         }
         updateDisplay();
     } else if (firstOperator != '' && secondOperator != '') {
-        //sixth step = input of new operator
+        //sixth step = input of new operator after getting first operator and second operator
         secondValue = displayValue;
         solution = operate(secondOperator, firstValue, secondValue);
         secondOperator = operator;
@@ -129,7 +129,7 @@ function getEquals(){
         //pressing equals when there is no operator
         displayValue = displayValue;
     } else if (secondOperator != '') {
-        //if there is a second operator, next equals operation
+        //if there is a second operator, do the operation
         secondValue = displayValue;
         solution = operate(secondOperator, firstValue, secondValue);
         if (solution === 'ERROR...ERROR') {
@@ -144,7 +144,7 @@ function getEquals(){
         }
         updateDisplay();
     } else {
-        //first equals operaton
+        //fourth step = do the operaton
         secondValue = displayValue;
         solution = operate(firstOperator, firstValue, secondValue);
         if (solution === 'ERROR...ERROR') {
@@ -162,7 +162,7 @@ function getEquals(){
 }
 
 function clearEverything() {
-        //reset of all variables
+        //reset all variables
         displayValue = 0;
         firstValue = 0;
         secondValue = 0;
@@ -172,6 +172,7 @@ function clearEverything() {
 }
 
 function deleteLastChar() {
+    //function backspace
     if (displayValue === 0) {
         displayValue = displayValue;
     } else {
